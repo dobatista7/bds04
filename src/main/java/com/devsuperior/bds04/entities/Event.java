@@ -1,18 +1,24 @@
 package com.devsuperior.bds04.entities;
 
+import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name = "tb_event")
-public class Event {
+public class Event implements Serializable{
+	private static final long serialVersionUID = 1L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,6 +30,13 @@ public class Event {
 	@ManyToOne
 	@JoinColumn(name = "city_id")
 	private City city;
+	
+	@ManyToMany
+	@JoinTable(name = "tb_event_city",
+		joinColumns = @JoinColumn(name = "event_id"),
+		inverseJoinColumns = @JoinColumn(name = "city_id"))
+	Set<City> cities = new HashSet<>();
+	
 	
 	public Event() {
 	}
@@ -75,4 +88,10 @@ public class Event {
 	public void setCity(City city) {
 		this.city = city;
 	}
+	
+	public Set<City> getCities() {
+		return cities;
+	}
+
+		
 }
